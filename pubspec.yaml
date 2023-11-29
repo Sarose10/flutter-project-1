@@ -38,6 +38,7 @@ dependencies:
   google_fonts: ^6.1.0
   get: ^4.6.6
   flutter_screenutil: ^5.9.0
+  flutter_riverpod: ^2.4.9
 
 dev_dependencies:
   flutter_test:
@@ -80,10 +81,10 @@ flutter:
   fonts:
     - family: Raleway
       fonts:
-        - asset: fonts/Raleway-Regular.ttf
-        - asset: fonts/Raleway-Medium.ttf
+        - asset: assets/fonts/Raleway-Regular.ttf
+        - asset: assets/fonts/Raleway-Medium.ttf
           weight: 500
-        - asset: fonts/Raleway-Italic.ttf
+        - asset: assets/fonts/Raleway-Italic.ttf
 
 
   #

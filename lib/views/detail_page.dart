@@ -1,39 +1,67 @@
-
 import 'package:flutter/material.dart';
+import 'package:vk/constants/app_sizes.dart';
+import 'package:vk/models/book.dart';
 
 
 class DetailPage extends StatelessWidget {
-  const DetailPage({super.key});
+  final Book book;
+  const DetailPage({super.key, required this.book});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Detail Page'),
-      ),
-      body: Container(
-        height: 900,
-        width: double.infinity,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
+        body: ListView(
           children: [
-            Container(
-              color: Colors.red,
-              height: 200,
-              width: 100,
+            Image.network(book.image,
+              height: 450,
+              fit: BoxFit.fill,width: double.infinity,),
+            AppSizes.gapH16,
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(book.title),
+                      Column(
+                        children: [
+                          Text(book.genre),
+                          Text(book.rating)
+                        ],
+                      )
+                    ],
+                  ),
+                  AppSizes.gapH16,
+                  Text(book.detail),
+                  AppSizes.gapH16,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            // backgroundColor: Colors.blue,
+                            // foregroundColor: Colors.black
+                          ),
+                          onPressed: (){
+
+                          }, child: Text('Read Book')),
+                      AppSizes.gapW14,
+                      OutlinedButton(
+                          style: OutlinedButton.styleFrom(
+                              foregroundColor: Colors.pink
+                          ),
+                          onPressed: (){
+
+                          }, child: Text('More Info'))
+                    ],
+                  )
+                ],
+              ),
             ),
-            Icon(Icons.access_alarms),
-            TextButton(onPressed: (){}, child: Text('Hello')),
-            IconButton(onPressed: (){}, icon: Icon(Icons.history)),
-            ElevatedButton(onPressed: (){}, child: Text('Login')),
-            Text('9000', style: TextStyle(color: Colors.red, fontSize: 20),),
-            SizedBox(height: 10,),
-            Text('9000'),
-            Text('9000'),
-            Text('9000'),
+
           ],
-        ),
-      ),
+        )
     );
   }
 }

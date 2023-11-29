@@ -1,8 +1,8 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:vk/constants/app_sizes.dart';
 import 'package:vk/dummy/book_data.dart';
 import 'package:vk/views/widgets/sample.dart';
 
@@ -32,7 +32,7 @@ class HomePage extends StatelessWidget {
 
             Image.asset('assets/images/merm.jpg',
               height: 300.h,
-              width: double.infinity, fit: BoxFit.cover,),
+              width: double.infinity, fit: BoxFit.fill,),
             AppSizes.gapH14,
             Sample(),
             Padding(
