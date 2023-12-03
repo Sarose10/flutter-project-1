@@ -1,78 +1,93 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vk/constants/app_sizes.dart';
-import 'package:vk/dummy/book_data.dart';
-import 'package:vk/views/widgets/sample.dart';
-
+import 'package:vk/models/note.dart';
+import 'package:vk/provider/riverpod_providers.dart';
 
 
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+  HomePage({super.key});
 
+  final textControl = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
-
     return Scaffold(
         appBar: AppBar(
-          title: Text('Hi John,', style: GoogleFonts.roboto(),),
-          actions: [
-            Icon(CupertinoIcons.search),
-            AppSizes.gapW16,
-            Icon(
-              CupertinoIcons.bell_fill, color: Colors.red,size: 30,),
-            AppSizes.gapW16
-          ],
+          backgroundColor: Colors.purple,
+          foregroundColor: Colors.white,
+          title: Text('Note App'),
         ),
-        body: ListView(
-          children: [
+        body: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Consumer(
+              builder: (context, ref, child) {
+                final notes = ref.watch(todoProvider);
 
-            Image.asset('assets/images/merm.jpg',
-              height: 300.h,
-              width: double.infinity, fit: BoxFit.fill,),
-            AppSizes.gapH14,
-            Sample(),
-            Padding(
-              padding:  EdgeInsets.symmetric(horizontal: 10.w),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('You may also like',
-                    style: TextStyle(fontSize: 17.sp, fontWeight: FontWeight.bold),),
-                  Container(
-                    margin: EdgeInsets.only(top: 10.h),
-                    height: 200.h,
-                    child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: bookDataFromJson.length,
-                        itemBuilder: (context, index){
-                          return Container(
-                            width: 100.w,
-                            margin: EdgeInsets.only(right: 10.w),
-                            child: Column(
-                              children: [
-                                ClipRRect(
-                                    borderRadius: BorderRadius.circular(10.w),
-                                    child: Image.network(bookDataFromJson[index].image)),
-                                AppSizes.gapH6,
-                                Text(bookDataFromJson[index].genre, style: TextStyle(color: Colors.blueGrey),),
-                              ],
-                            ),
-                          );
-                        }
+                return Column(
+                  children: [
+                    AppSizes.gapH12,
+                    TextFormField(
+                      controller: textControl,
+
+                      onFieldSubmitted: (val) {
+
+                        final note = Note(
+                            title: val.trim(),
+                            createdAt: DateTime.now().toString()
+                        );
+                        ref.read(todoProvider.notifier).noteAdd(note);
+                        textControl.clear();
+                      },
+                      decoration: InputDecoration(
+                          hintText: 'Add some',
+                          contentPadding: EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 10),
+                          border: OutlineInputBorder(),
+                          prefixIcon: Icon(Icons.today)
+                      ),
                     ),
-                  ),
-
-                ],
-              ),
-            )
-
-          ],
+                    Expanded(
+                        child: ListView.builder(
+                            itemCount: notes.length,
+                            itemBuilder: (context, index){
+                              final note = notes[index];
+                              return ListTile(
+                                title: Text(note.title),
+                                subtitle: Text(note.createdAt),
+                                trailing: Container(
+                                    width: 100,
+                                    child: Row(
+                                      children: [
+                                        IconButton(onPressed: (){}, icon:Icon(Icons.edit)),
+                                        IconButton(
+                                            onPressed: (){
+                                              showDialog(context: context, builder: (context){
+                                                return AlertDialog(
+                                                  title: Text('Hold ON'),
+                                                  content: Text('Are You sure ?'),
+                                                  actions: [
+                                                    TextButton(onPressed: (){
+                                                      Navigator.pop(context);
+                                                      ref.read(todoProvider.notifier).noteRemove(note);
+                                                    }, child: Text('Yes')),
+                                                    TextButton(onPressed: (){
+                                                      Navigator.pop(context);
+                                                    }, child: Text('No')),
+                                                  ],
+                                                );
+                                              });
+                                            }, icon:Icon(Icons.delete)),
+                                      ],
+                                    )),
+                              );
+                            })
+                    )
+                  ],
+                );
+              }
+          ),
         )
-
     );
   }
 }
