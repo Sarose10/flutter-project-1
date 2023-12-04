@@ -10,6 +10,7 @@ class HomePage extends StatelessWidget {
   HomePage({super.key});
 
   final textControl = TextEditingController();
+  final textControl1 = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,7 +60,32 @@ class HomePage extends StatelessWidget {
                                     width: 100,
                                     child: Row(
                                       children: [
-                                        IconButton(onPressed: (){}, icon:Icon(Icons.edit)),
+                                        IconButton(
+
+                                            onPressed: (){
+                                              showDialog(context: context, builder: (context){
+                                                return AlertDialog(
+                                                  title: Text('Edit'),
+                                                  content: TextFormField(
+                                                    controller: textControl1..text = note.title,
+                                               ),
+                                                  actions: [
+                                                    TextButton(onPressed: (){
+                                                      final newNote = Note(
+                                                          title: textControl1.text.trim(),
+                                                          createdAt: note.createdAt
+                                                      );
+                                                      Navigator.of(context).pop();
+                                                      ref.read(todoProvider.notifier).noteUpdate(newNote);
+                                                    }, child: Text('Update')),
+                                                    TextButton(onPressed: (){
+                                                      Navigator.of(context).pop();
+                                                    }, child: Text('Cancel'))
+                                                  ],
+                                                );
+                                              });
+
+                                            }, icon:Icon(Icons.edit)),
                                         IconButton(
                                             onPressed: (){
                                               showDialog(context: context, builder: (context){
